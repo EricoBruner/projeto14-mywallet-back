@@ -1,10 +1,12 @@
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
-import registerValidator from "../validators/registerValidator.js";
-import loginValidator from "../validators/loginValidator.js";
+import {
+  loginValidator,
+  registerValidator,
+} from "../validators/auth.validator.js";
 
-import { db } from "../config/database.js";
+import { db } from "../database/database.conection.js";
 
 export async function signUp(req, res) {
   const { name, email, password } = req.body;
