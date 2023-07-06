@@ -1,6 +1,6 @@
 import joi from "joi";
 
-export default function userValidator(user) {
+export default function registerValidator(user) {
   const userSchema = joi.object({
     name: joi.string().required(),
     email: joi.string().email().required(),
