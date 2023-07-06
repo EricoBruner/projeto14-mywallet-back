@@ -21,7 +21,7 @@ router.post("/cadastro", async (req, res) => {
     if (error) return res.status(422).send(error);
 
     const resp = await db.collection("users").findOne({ email });
-    if (resp) return res.sendStatus(409);
+    if (resp) return res.status(409).send("E-mail já cadastrado!");
 
     await db.collection("users").insertOne(user);
 
