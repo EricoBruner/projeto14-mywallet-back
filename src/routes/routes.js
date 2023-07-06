@@ -48,6 +48,7 @@ router.post("/", async (req, res) => {
     if (!bcrypt.compareSync(password, user.password))
       return res.status(401).send("Usuario ou senha incorretas!");
 
+    await db.collection("sessions").deleteOne({ userId: user._id });
     await db.collection("sessions").insertOne({ userId: user._id, token });
 
     return res.status(200).send(token);
