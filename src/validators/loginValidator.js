@@ -6,7 +6,7 @@ export default function loginValidator(login) {
     password: joi.string().min(3).required(),
   });
 
-  const validation = loginSchema.validate(login);
+  const validation = loginSchema.validate(login, { abortEarly: false });
 
   if (validation.error) {
     const errors = validation.error.details.map((detail) => detail.message);

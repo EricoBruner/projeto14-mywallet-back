@@ -37,16 +37,20 @@ router.post("/", async (req, res) => {
   const login = { email, password };
 
   try {
+    const token = uuid();
+
     const error = loginValidator(login);
     if (error) return res.status(422).send(error);
 
-    const resp = await db.collection("users").findOne({ email });
-    if (!resp) return res.sendStatus(404);
+    const user = await db.collection("users").findOne({ email });
+    if (!user) return res.status(404).send("Usuario não encontrado!");
 
-    if (!bcrypt.compareSync(password, resp.password))
-      return res.sendStatus(401);
+    if (!bcrypt.compareSync(password, user.password))
+      return res.status(401).send("Usuario ou senha incorretas!");
 
-    return res.sendStatus(200);
+    await db.collection("sessions").insertOne({ userId: user._id, token });
+
+    return res.status(200).send(token);
   } catch (err) {
     return res.status(500).send(err.message);
   }

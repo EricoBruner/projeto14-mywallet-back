@@ -7,7 +7,7 @@ export default function registerValidator(user) {
     password: joi.string().min(3).required(),
   });
 
-  const validation = userSchema.validate(user);
+  const validation = userSchema.validate(user, { abortEarly: false });
 
   if (validation.error) {
     const errors = validation.error.details.map((detail) => detail.message);
