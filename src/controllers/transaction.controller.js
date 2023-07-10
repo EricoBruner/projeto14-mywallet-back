@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 import transactionValidator from "../validators/transaction.validator.js";
 
 import { db } from "../database/database.conection.js";
@@ -6,14 +8,13 @@ export async function createTransaction(req, res) {
   const { tipo } = req.params;
   const { amount, description } = req.body;
 
-  console.log(res.locals.userId, "TIPO: ", typeof res.locals.userId);
-
   try {
     const transaction = {
-      amount,
+      amount: parseFloat(amount),
       description,
       type: tipo,
       userId: res.locals.userId,
+      date: dayjs(Date.now()).format("DD/MM"),
     };
 
     const error = transactionValidator(transaction);
@@ -22,6 +23,22 @@ export async function createTransaction(req, res) {
     await db.collection("transactions").insertOne(transaction);
 
     return res.sendStatus(201);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}
+
+export async function getAllUserTransaction(req, res) {
+  try {
+    const userId = res.locals.userId;
+
+    const userTransaction = await db
+      .collection("transactions")
+      .find({ userId })
+      .project({ userId: 0 })
+      .toArray();
+
+    return res.status(201).send(userTransaction);
   } catch (err) {
     return res.status(500).send(err.message);
   }
