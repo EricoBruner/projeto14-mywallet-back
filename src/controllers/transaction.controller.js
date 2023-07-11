@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import transactionValidator from "../validators/transaction.validator.js";
 
 import { db } from "../database/database.conection.js";
+import { ObjectId } from "mongodb";
 
 export async function createTransaction(req, res) {
   const { tipo } = req.params;
@@ -39,6 +40,18 @@ export async function getAllUserTransaction(req, res) {
       .toArray();
 
     return res.status(201).send(userTransaction);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}
+
+export async function deleteTransaction(req, res) {
+  try {
+    const { id } = req.params;
+
+    await db.collection("transactions").deleteOne({ _id: new ObjectId(id) });
+
+    return res.sendStatus(204);
   } catch (err) {
     return res.status(500).send(err.message);
   }
