@@ -6,14 +6,14 @@ import { db } from "../database/database.conection.js";
 import { ObjectId } from "mongodb";
 
 export async function createTransaction(req, res) {
-  const { tipo } = req.params;
+  const { type } = req.params;
   const { amount, description } = req.body;
 
   try {
     const transaction = {
       amount: parseFloat(amount),
       description,
-      type: tipo,
+      type: type,
       userId: res.locals.userId,
       date: dayjs(Date.now()).format("DD/MM"),
     };
@@ -40,6 +40,22 @@ export async function getAllUserTransaction(req, res) {
       .toArray();
 
     return res.status(201).send(userTransaction);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}
+
+export async function getOneTransaction(req, res) {
+  try {
+    const { id } = req.params;
+
+    const userTransaction = await db
+      .collection("transactions")
+      .find({ _id: new ObjectId(id) })
+      .project({ userId: 0 })
+      .toArray();
+
+    return res.status(200).send(userTransaction);
   } catch (err) {
     return res.status(500).send(err.message);
   }
