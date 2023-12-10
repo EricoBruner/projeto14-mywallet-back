@@ -12,10 +12,10 @@ const promise = mongoClient.connect();
 promise
   .then(() => {
     db = mongoClient.db();
-    console.log("Conexão com o banco de dados estabelecida com sucesso!");
+    console.log("Connection to the database successfully established!");
   })
   .catch((err) => {
-    console.log("Erro ao conectar ao banco de dados:", err.message);
+    console.log("Error connecting to database:", err.message);
   });
 
 export { db };
