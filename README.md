@@ -53,7 +53,7 @@ Represents a user.
   <li>Create a new user.</li>
   <br/>
   Parameters:
-  <li>type (string): transaction type (can be just exit or entrance).</li>
+  <li>type (string): transaction type (can be just `in` or `out`).</li>
   <br/>
 
 Body of request:
